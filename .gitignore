@@ -1,0 +1,48 @@
+# Operating systems
+.DS_Store
+Thumbs.db
+
+# Editors and IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Build and dependency artifacts
+bin/
+build/
+dist/
+target/
+node_modules/
+vendor/
+coverage/
+*.out
+*.exe
+*.test
+
+# Temporary laboratory artifacts
+**/work/tmp/
+**/work/cache/
+**/work/logs/
+**/work/bin/
+
+# Large runtime artifacts
+*.iso
+*.img
+*.qcow2
+*.vdi
+*.vmdk
+*.pcap
+*.pcapng
+*.core
+core
+
+# Keep small intentional fixtures by negating them in a local .gitignore when needed.
