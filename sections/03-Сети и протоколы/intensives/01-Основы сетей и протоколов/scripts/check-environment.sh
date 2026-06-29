@@ -16,8 +16,7 @@ recommended=(
   mtr nmap iperf3 ethtool
   dnsmasq unbound-checkconf named-checkconf
   nginx haproxy
-  wg frr version
-  radvd chronyd
+  wg vtysh radvd chronyd
   termshark shellcheck python3
 )
 
@@ -59,8 +58,9 @@ else
   printf '[warning] network namespace interface is unavailable.\n'
 fi
 
-if ip netns add nl-check-$$ >/dev/null 2>&1; then
-  ip netns del nl-check-$$ >/dev/null 2>&1 || true
+namespace_name="nl-check-$$"
+if ip netns add "$namespace_name" >/dev/null 2>&1; then
+  ip netns del "$namespace_name" >/dev/null 2>&1 || true
   printf '[ok] namespace creation works with current privileges.\n'
 else
   printf '[warning] namespace creation failed; run labs with sudo inside a disposable VM.\n'
