@@ -1,0 +1,40 @@
+name: Build Russian prose normalization
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  normalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install translation runtime
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --extra-index-url https://download.pytorch.org/whl/cpu 'torch>=2.2,<3' 'transformers>=4.44,<5' 'sentencepiece>=0.2,<1' 'sacremoses>=0.1,<1'
+      - name: Normalize prose
+        env:
+          TOKENIZERS_PARALLELISM: 'false'
+          TRANSLATION_MODEL: Helsinki-NLP/opus-mt-en-ru
+        run: python scripts/normalize_russian_prose.py
+      - name: Package result
+        run: |
+          git diff --binary > normalized-russian-prose.patch
+          tar -czf normalized-russian-prose.tar.gz sections README.md RULES.md AGENTS.md docs/CONCEPT.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: normalized-russian-prose
+          path: |
+            normalized-russian-prose.patch
+            normalized-russian-prose.tar.gz
+          retention-days: 1
