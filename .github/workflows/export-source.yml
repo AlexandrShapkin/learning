@@ -15,9 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Package repository
-        run: tar --exclude=.git --exclude=learning-source.tar.gz -czf learning-source.tar.gz .
+        run: tar --exclude=.git -czf "$RUNNER_TEMP/learning-source.tar.gz" .
       - uses: actions/upload-artifact@v4
         with:
           name: learning-source
-          path: learning-source.tar.gz
+          path: ${{ runner.temp }}/learning-source.tar.gz
           retention-days: 1
